@@ -32,3 +32,11 @@ void ADreamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
+void ADreamCharacter::Move(const FInputActionValue& Value) {
+
+}
+
+void ADreamCharacter::Look(const FInputActionValue& Value) {
+	
+}
+
