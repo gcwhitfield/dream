@@ -21,7 +21,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* IA_Look;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta =(AllowPrivateAccess = "true"))
+	class UCameraComponent* FirstPersonCamera;
 
 public:
 	// Sets default values for this character's properties
