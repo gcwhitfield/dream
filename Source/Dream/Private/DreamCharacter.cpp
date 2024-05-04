@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ADreamCharacter::ADreamCharacter()
@@ -33,11 +34,49 @@ void ADreamCharacter::BeginPlay()
 	}
 }
 
+// Check to see if the player is looking at an interactable object.
+UInteractableComponent* ADreamCharacter::IsLookingAtInteractable() const {
+	// Do a raycast to see if the player is looking at the interactable.
+	FHitResult hitResult;
+	FCollisionQueryParams queryParams;
+	queryParams.AddIgnoredActor(this);
+	if (UWorld* world = GetWorld(); world != nullptr) {
+		DrawDebugLine(
+			world,
+			FirstPersonCamera->GetComponentLocation(),
+			FirstPersonCamera->GetComponentLocation() + (FirstPersonCamera->GetForwardVector() * InteractableRaycastDistance), 
+			FColor::Red, 
+			false);
+		
+		if (world->LineTraceSingleByChannel(
+			hitResult,
+			FirstPersonCamera->GetComponentLocation(),
+			FirstPersonCamera->GetComponentLocation() + (FirstPersonCamera->GetForwardVector() * InteractableRaycastDistance),
+			ECC_WorldStatic,
+			queryParams)) {
+			UE_LOG(LogTemp, Warning, TEXT("Hit"));
+			AActor* hitActor = hitResult.GetActor();
+			return hitActor->GetComponentByClass<UInteractableComponent>();
+			return nullptr;
+		}
+		else {
+			//UE_LOG(LogTemp, Warning, TEXT("Raycast failed :("));
+		}
+		
+			
+	}
+	return nullptr;
+}
+
+
+
 // Called every frame
 void ADreamCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (UInteractableComponent* interactable = IsLookingAtInteractable(); interactable != nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("looking at interactable"));
+	}
 }
 
 // Called to bind functionality to input

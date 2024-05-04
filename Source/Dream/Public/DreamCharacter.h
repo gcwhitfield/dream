@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "InteractableComponent.h"
 #include "DreamCharacter.generated.h"
 
 UCLASS()
@@ -25,6 +26,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta =(AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCamera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	// Longer allows the player to interact from a farther distance.
+	float InteractableRaycastDistance;
+
 public:
 	// Sets default values for this character's properties
 	ADreamCharacter();
@@ -35,6 +40,8 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	// Returns a pointer to an interactable if they player is looking at it.
+	UInteractableComponent* IsLookingAtInteractable() const;
 
 public:	
 	// Called every frame
